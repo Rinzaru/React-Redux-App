@@ -8,9 +8,22 @@ export const fetchChampion = () => {
         "http://ddragon.leagueoflegends.com/cdn/10.15.1/data/en_US/champion.json"
       )
       .then((resp) => {
-        console.log(resp.data["Aatrox"], "response");
+        // console.log("response", resp.data.data);
+        const championsBad = Object.entries(resp.data.data);
 
-        dispatch({ type: "FETCH_CHAMPION_SUCCESS", payload: resp.data });
+        const champions = championsBad.map((champion) => {
+          const champName = champion[0];
+          const champData = champion[1];
+          return { name: champName, ...champData };
+        });
+        // console.log(champions, "Champion actions");
+
+        // const championMapping = champions.map((champion) => {
+        //   const champId = champion.id;
+        //   console.log(champId);
+        // });
+
+        dispatch({ type: "FETCH_CHAMPION_SUCCESS", payload: champions });
       })
       .catch((err) => console.log(err.repsonse));
   };
